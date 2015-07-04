@@ -1,0 +1,8 @@
+module.exports = { port: 8080
+                 , rmq: { host: '127.0.0.1'
+                        , port: 5672
+                        , login: 'guest'
+                        , password: 'guest'
+                        , vhost: '/'
+                        }
+                 };

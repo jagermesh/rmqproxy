@@ -1,0 +1,7 @@
+node_linux
+node_macos
+node_modules
+.DS_Store
+config.js
+run_linux.sh
+run_macos.sh

@@ -1,0 +1,8 @@
+{
+  "name": "rmqproxy",
+  "version": "0.1.0",
+  "devDependencies": {
+    "rabbit.js": "^0.4.3",
+    "socket.io": "^1.3.5"
+  }
+}
