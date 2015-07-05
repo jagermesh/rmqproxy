@@ -62,8 +62,7 @@ class BrRabbitMQ {
   function sendMessage($exchangeName, $message, $routingKey = null) {
 
     $this->connect();
-    $message = json_encode($message);
-    $msg = new AMQPMessage( $message
+    $msg = new AMQPMessage( json_encode($message)
                           , array( 'content_type' => 'application/json'
                                  , 'delivery_mode' => 2
                                  ));

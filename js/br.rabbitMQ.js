@@ -68,6 +68,10 @@
       subscribe();
     };
 
+    this.sendMessage = function(exchange, data, topic) {
+      socket.emit('RMQ/SendMessage', { exchange: exchange, data: data, topic: topic });
+    };
+
     return this;
 
   }
