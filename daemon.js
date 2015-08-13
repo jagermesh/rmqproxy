@@ -34,15 +34,19 @@ context.on('ready', function() {
 
     });
 
-    socket.on('RMQ/SendMessage', function(data) {
+    if (!config.sendDisabled) {
 
-      // console.log('SendMessage: ' + JSON.stringify(data));
-      var pub = context.socket('PUB', { routing: 'topic' });
-      pub.connect(data.exchange, function() {
-        pub.publish(data.topic, JSON.stringify(data.data));
+      socket.on('RMQ/SendMessage', function(data) {
+
+        // console.log('SendMessage: ' + JSON.stringify(data));
+        var pub = context.socket('PUB', { routing: 'topic' });
+        pub.connect(data.exchange, function() {
+          pub.publish(data.topic, JSON.stringify(data.data));
+        });
+
       });
 
-    });
+    }
 
     socket.on('error', function(error) {
       console.log(error);
