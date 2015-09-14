@@ -3,8 +3,12 @@
 var config = require('./config.js');
 var io = require('socket.io');
 var rabbitjs = require('rabbit.js');
+var url = 'amqp://' + config.rmq.host + ':' + config.rmq.port;
 
-var context = rabbitjs.createContext('amqp://' + config.rmq.host + ':' + config.rmq.port);
+console.log('Connecting to ' + url);
+
+var context = rabbitjs.createContext(url);
+
 context.on('ready', function() {
 
   var socketServer = io.listen(config.port, { log: false });
@@ -13,11 +17,15 @@ context.on('ready', function() {
 
   socketServer.on('connection', function(socket) {
 
+    console.log('Connected');
+
     var subs = [];
 
     socket.on('RMQ/Subscribe', function(data) {
 
       var uid = data.uid;
+
+      console.log('RMQ/Subscribe ' + data.topic);
 
       var sub = context.socket('SUB', { routing: 'topic' });
       sub.connect(data.exchange, data.topic, function() {
