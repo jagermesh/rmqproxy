@@ -29,12 +29,12 @@ context.on('ready', function() {
 
       var sub = context.socket('SUB', { routing: 'topic' });
       sub.connect(data.exchange, data.topic, function() {
-        // console.log('Subscribe (' + uid + '): ' + JSON.stringify(data));
+        console.log('Subscribe (' + uid + '): ' + JSON.stringify(data));
         socket.emit('RMQ/Subscribed', { uid: uid });
         sub.setEncoding('utf8');
         subs.push(sub);
         sub.on('data', function(data) {
-          // console.log('Data (' + uid + '): ' + data);
+          console.log('Data (' + uid + '): ' + data);
           socket.emit('RMQ/Message', { uid: uid, data: JSON.parse(data) });
         });
 
