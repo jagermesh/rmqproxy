@@ -25,7 +25,7 @@ context.on('ready', function() {
 
       var uid = data.uid;
 
-      console.log('RMQ/Subscribe ' + data.topic);
+      console.log('RMQ/Subscribe ' + data.exchange + ' : ' + data.topic);
 
       var sub = context.socket('SUB', { routing: 'topic' });
       sub.connect(data.exchange, data.topic, function() {
