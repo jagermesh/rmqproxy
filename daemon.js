@@ -2,14 +2,26 @@
 
 var config = require('./config.js');
 var io = require('socket.io');
-var rabbitjs = require('rabbit.js');
-var url = 'amqp://' + config.rmq.host + ':' + config.rmq.port;
 
-console.log('Connecting to ' + url);
+if (config.rmqDisabled) {
 
-var context = rabbitjs.createContext(url);
+  run();
 
-context.on('ready', function() {
+} else {
+
+  var rabbitjs = require('rabbit.js');
+  var url = 'amqp://' + config.rmq.host + ':' + config.rmq.port;
+
+  console.log('Connecting to ' + url);
+
+  var rabbitContext = rabbitjs.createContext(url);
+  rabbitContext.on('ready', function() {
+    run(rabbitContext);
+  });
+
+}
+
+function run(rabbitContext) {
 
   var socketServer = io.listen(config.port, { log: false });
 
@@ -27,7 +39,7 @@ context.on('ready', function() {
 
       console.log('RMQ/Subscribe ' + data.exchange + ' : ' + data.topic);
 
-      var sub = context.socket('SUB', { routing: 'topic' });
+      var sub = rabbitContext.socket('SUB', { routing: 'topic' });
       sub.connect(data.exchange, data.topic, function() {
         console.log('Subscribe (' + uid + '): ' + JSON.stringify(data));
         socket.emit('RMQ/Subscribed', { uid: uid });
@@ -47,7 +59,7 @@ context.on('ready', function() {
       socket.on('RMQ/SendMessage', function(data) {
 
         // console.log('SendMessage: ' + JSON.stringify(data));
-        var pub = context.socket('PUB', { routing: 'topic' });
+        var pub = rabbitContext.socket('PUB', { routing: 'topic' });
         pub.connect(data.exchange, function() {
           pub.publish(data.topic, JSON.stringify(data.data));
         });
@@ -72,5 +84,4 @@ context.on('ready', function() {
 
   });
 
-});
-
+}
