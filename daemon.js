@@ -4,6 +4,9 @@ var config = require('./config.js');
 var io = require('socket.io');
 var rabbitjs = require('rabbit.js');
 var url = 'amqp://' + config.rmq.host + ':' + config.rmq.port;
+var posix = require('posix');
+
+posix.setrlimit('nofile', { soft: 10000, hard: 10000 });
 
 console.log('Connecting to ' + url);
 

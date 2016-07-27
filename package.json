@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "devDependencies": {
     "rabbit.js": "latest",
+    "posix": "latest",
     "socket.io": "latest"
   }
 }
